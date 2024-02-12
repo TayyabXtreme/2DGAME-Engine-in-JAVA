@@ -6,6 +6,10 @@ public abstract class XSScene {
 
     }
 
+    public void init() {
+
+    }
+
     public abstract void update(float dt);
 
 }
