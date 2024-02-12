@@ -2,6 +2,8 @@ package Xtrem;
 
 public abstract class XSScene {
 
+    protected XSCamera camera;
+
     public XSScene(){
 
     }
