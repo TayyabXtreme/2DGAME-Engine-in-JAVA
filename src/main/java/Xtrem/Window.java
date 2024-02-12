@@ -12,12 +12,23 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 public class Window {
    private int width,height;
    private String title;
+
    private long glfwWindow;
+
+    private float r, g, b, a;
+    private boolean fadeToBlack = false;
+
    private static Window window=null;
     private Window(){
+
         this.width=1920;
         this.height=1080;
         this.title="XGE";
+        r = 1;
+        b = 1;
+        g = 1;
+        a = 1;
+
     }
     public static Window get(){
         if(Window.window==null){
@@ -67,6 +78,11 @@ public class Window {
             throw new IllegalStateException("Failed to create the GLFW Window");
         }
 
+        glfwSetCursorPosCallback(glfwWindow, XSMouseListener::mousePosCallback);
+        glfwSetMouseButtonCallback(glfwWindow, XSMouseListener::mouseButtonCallback);
+        glfwSetScrollCallback(glfwWindow, XSMouseListener::mouseScrollCallback);
+        glfwSetKeyCallback(glfwWindow, XSKeyListener::keyCallback);
+
         //Make the OPENGL context current
 
         glfwMakeContextCurrent(glfwWindow);
@@ -90,10 +106,23 @@ public class Window {
 
     public void loop(){
         while(!glfwWindowShouldClose(glfwWindow)){
+
             //poll events
+
             glfwPollEvents();
-            glClearColor(1.0f,1.0f,1.0f,1.0f);
+            glClearColor(r, g, b, a);
             glClear(GL_COLOR_BUFFER_BIT);
+
+            if (fadeToBlack) {
+                r = Math.max(r - 0.01f, 0);
+                g = Math.max(g - 0.01f, 0);
+                b = Math.max(b - 0.01f, 0);
+            }
+
+            if (XSKeyListener.isKeyPressed(GLFW_KEY_SPACE)) {
+                fadeToBlack = true;
+            }
+
 
             glfwSwapBuffers(glfwWindow);
         }
