@@ -1,5 +1,6 @@
 package Xtrem;
 
+import Util.Time;
 import org.joml.Vector2f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL20;
@@ -94,6 +95,7 @@ public class XSLevelEditorScene extends XSScene {
         defaultShader.use();
         defaultShader.uploadMat4f("uProjection",camera.getProjectionMatrix());
         defaultShader.uploadMat4f("uView",camera.getViewMatrix());
+        defaultShader.uploadFloat("uTime", Time.getTime());
         // Bind the VAO that we're using
         glBindVertexArray(vaoID);
 
